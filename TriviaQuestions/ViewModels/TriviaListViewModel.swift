@@ -9,10 +9,10 @@ final class TriviaListViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var debugMessage: String?
 
-    private let apiClient: ApiClient
+    private let apiClient: TriviaAPICLientProtocol
     private let viewedStore: ViewedQuestionsStore
  
-    init(apiClient: ApiClient) {
+    init(apiClient: TriviaAPICLientProtocol) {
         self.apiClient = apiClient
         self.viewedStore = ViewedQuestionsStore.shared
     }

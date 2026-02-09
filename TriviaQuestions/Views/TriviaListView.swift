@@ -45,20 +45,9 @@ struct TriviaListView: View {
                     }
                 }
                 .navigationTitle("Trivia Quest")
-                .toolbar {
-                    ToolbarItem(placement: .principal) {
-                        VStack {
-                            Text("Trivia Quest")
-                                .font(.headline)
-                            Text("\(viewModel.questions.count) questions")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                    }
                 }
                 .searchable(text: $viewModel.searchText)
                 .task {
-                    // Load only once — don't refresh when returning from details
                     if !hasLoadedOnce {
                         hasLoadedOnce = true
                         await viewModel.loadQuestions()
@@ -67,16 +56,6 @@ struct TriviaListView: View {
                 .navigationDestination(for: TriviaQuestion.self) {
                     TriviaDetailView(question: $0)
                 }
-
-                if let debug = viewModel.debugMessage {
-                    Text(debug)
-                        .font(.caption)
-                        .padding(8)
-                        .background(.ultraThinMaterial)
-                        .cornerRadius(8)
-                        .padding()
-                }
             }
         }
     }
-}
