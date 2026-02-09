@@ -1,14 +1,19 @@
 import Foundation
+import Combine
 
-final class ViewedQuestionsStore {
+@MainActor
+final class ViewedQuestionsStore: ObservableObject {
     static let shared = ViewedQuestionsStore()
-    private var viewedIDs: Set<UUID> = []
 
-    func markViewed(_ id: UUID) {
-        viewedIDs.insert(id)
-    }
+    @Published private(set) var viewedIDs: Set<UUID> = []
+
+    private init() {}
 
     func hasViewed(_ id: UUID) -> Bool {
         viewedIDs.contains(id)
+    }
+
+    func markViewed(_ id: UUID) {
+        viewedIDs.insert(id)
     }
 }

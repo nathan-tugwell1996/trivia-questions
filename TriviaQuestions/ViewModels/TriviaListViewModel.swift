@@ -7,6 +7,7 @@ final class TriviaListViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var debugMessage: String?
 
     private let apiClient: ApiClient
     private let viewedStore: ViewedQuestionsStore
@@ -18,12 +19,16 @@ final class TriviaListViewModel: ObservableObject {
 
     func loadQuestions() async {
         isLoading = true
+        defer { isLoading = false }
+
         do {
-            questions = try await apiClient.fetchQuestions()
+            let fetched = try await apiClient.fetchQuestions()
+            questions = fetched.map { $0.decoded() }
+            debugMessage = "Loaded \(questions.count) questions"
         } catch {
-            errorMessage = "Failed to load questions."
+            errorMessage = "Failed to load questions: \(error.localizedDescription)"
+            debugMessage = "Load failed: \(error)"
         }
-        isLoading = false
     }
 
     var filteredQuestions: [TriviaQuestion] {
